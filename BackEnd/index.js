@@ -2,7 +2,10 @@ const express = require('express');
 const mainRouter = require("./routes/index");
 const cors = require('cors')
 const userRouter = require("./routes/user");
+const { config } = require('dotenv');
 const app = express();
+
+// console.log(process.env.MONGO_URL)
 
 app.use(express.json());
 

@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const z = require("zod");
 const bcrypt = require("bcrypt");
-const { authMiddleware } = require('../middlewares/auth')
+const { authMiddleware } = require("../middlewares/auth");
 const { JWT_SECRET } = require("../config");
 const User = require("../db/db").User;
 
@@ -22,7 +22,7 @@ router.post(
     const parsed = signupSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({
-        error: "Invalid input"
+        error: "Invalid input",
       });
     }
 
@@ -74,17 +74,18 @@ router.post(
 );
 
 const updateBody = z.object({
-	  password: z.string().optional(),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-})
+  password: z.string().optional(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+});
 
 router.put("/settings", authMiddleware, async (req, res) => {
-    const { success } = updateBody.safeParse(req.body)
+  try {
+    const { success } = updateBody.safeParse(req.body);
     if (!success) {
-        res.status(411).json({
-            message: "Error while updating information"
-        })
+      res.status(411).json({
+        message: "Error while updating information",
+      });
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -92,13 +93,18 @@ router.put("/settings", authMiddleware, async (req, res) => {
       { $set: req.body },
       { new: true, runValidators: true }
     );
-    
 
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ message: "Updated successfully", updatedUser });
-})
+    const plainUser = updatedUser.toObject();
+    const {password_hash,...rest} = plainUser
+
+    res.json({ message: "Updated successfully", rest });
+  } catch (e) {
+    console.log("error", e);
+  }
+});
 
 module.exports = router;
