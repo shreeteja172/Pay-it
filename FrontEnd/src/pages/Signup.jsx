@@ -5,6 +5,7 @@ import InputBox from "../components/InputBox";
 import Button from "../components/Button";
 import BottomWarning from "../components/BottomWarning";
 import { useState } from "react";
+import axios from "axios";
 
 const Signup = () => {
   const [data, setData] = useState({
@@ -40,7 +41,18 @@ const Signup = () => {
             label={"Password"}
           />
           <div className="pt-4">
-            <Button label={"Sign up"} />
+            <Button 
+            onClick={async ()=>{
+              const response = await axios.post("http://localhost:3000/api/v1/user/signup", data)
+              .then((response) => {
+                console.log("Signup successful:", response.data);
+              })
+              .catch((error) => {
+                console.error("There was an error signing up:", error);
+              });
+              localStorage.setItem("token", response.data.token);
+            }}
+            label={"Sign up"} />
           </div>
           <BottomWarning
             label={"Already have an account?"}
