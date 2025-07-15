@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const z = require("zod");
 const bcrypt = require("bcrypt");
 const { authMiddleware } = require("../middlewares/auth");
-const { JWT_SECRET } = require("../db/db");
-const { User, Account } = require("../db/db");
+const { JWT_SECRET } = require("../config");
+const { User, Account } = require("../models/db");
 const router = express.Router();
 
 const signupSchema = z.object({
@@ -14,7 +14,6 @@ const signupSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
 });
-
 
 router.post(
   "/signup",
@@ -42,9 +41,9 @@ router.post(
 
     //account with balance
     await Account.create({
-        userid: newUser._id,
-        balance: 1 + Math.random() * 10000,
-    })
+      userid: newUser._id,
+      balance: 1 + Math.random() * 10000,
+    });
 
     const token = jwt.sign({ userId: newUser._id }, JWT_SECRET);
 
@@ -85,71 +84,78 @@ const updateBody = z.object({
   lastName: z.string().optional(),
 });
 
-router.put("/settings", authMiddleware, asyncHandler(async (req, res) => {
-  const parsed = updateBody.safeParse(req.body);
-  // console.log(parsed)[]
-  if (!parsed.success) {
-    return res.status(411).json({
-      message: "Error while updating information",
+router.put(
+  "/settings",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    const parsed = updateBody.safeParse(req.body);
+    // console.log(parsed)[]
+    if (!parsed.success) {
+      return res.status(411).json({
+        message: "Error while updating information",
+      });
+    }
+
+    const updateData = { ...parsed.data };
+    // console.log(updateData);
+
+    // console.log(updateData.password);
+
+    if (updateData.password) {
+      const saltRounds = 10;
+      updateData.password_hash = await bcrypt.hash(
+        updateData.password,
+        saltRounds
+      );
+      delete updateData.password;
+    }
+    // console.log(updateData.password_hash);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userid,
+      { $set: updateData },
+      { new: true, runValidators: true, select: "-password_hash" }
+    );
+    // console.log(updatedUser)
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+      message: "Updated successfully",
+      user: updatedUser,
     });
-  }
+  })
+);
 
-  const updateData = { ...parsed.data };
-  // console.log(updateData);
-  
-  // console.log(updateData.password);
-  
-  if (updateData.password) {
-    const saltRounds = 10;
-    updateData.password_hash = await bcrypt.hash(updateData.password, saltRounds);
-    delete updateData.password; 
-  }
-  // console.log(updateData.password_hash);
-  
-
-  const updatedUser = await User.findByIdAndUpdate(
-    req.userid,
-    { $set: updateData },
-    { new: true, runValidators: true, select: '-password_hash' }
-  );
-  // console.log(updatedUser)  
-
-  if (!updatedUser) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  res.json({ 
-    message: "Updated successfully",
-    user: updatedUser
-  });
-}));
-
-router.get('/bulk',async (req,res) => {
-  const filter  = req.query.filter || "";
+router.get("/bulk", async (req, res) => {
+  const filter = req.query.filter || "";
   const users = await User.find({
-    $or:[
+    $or: [
       {
         firstName: {
           $regex: filter,
-        }
-      },{
-        lastName:{
-          $regex: filter
-        }
-      }
-    ]
-  })
+        },
+      },
+      {
+        lastName: {
+          $regex: filter,
+        },
+      },
+    ],
+  });
 
   res.json({
-    user: users.map(user => ({
+    user: users.map((user) => ({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
-      _id : user._id
-    }))
-  })
-})
+      _id: user._id,
+    })),
+  });
+});
 
-
+// router.get('/')
 
 module.exports = router;
