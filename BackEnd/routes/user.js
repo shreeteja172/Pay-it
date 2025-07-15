@@ -9,7 +9,7 @@ const { User, Account } = require("../models/db");
 const router = express.Router();
 
 const signupSchema = z.object({
-  username: z.string().min(3).max(30),
+  email: z.string().min(3).max(30),
   password: z.string().min(6),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
@@ -25,15 +25,15 @@ router.post(
       });
     }
 
-    const { username, password, firstName, lastName } = parsed.data;
+    const { email, password, firstName, lastName } = parsed.data;
 
     // Check if user already exists or not
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "User already exists" });
     }
 
-    const newUser = new User({ username, firstName, lastName });
+    const newUser = new User({ email, firstName, lastName });
     const hashedPassword = await newUser.createHash(password);
     newUser.password_hash = hashedPassword;
 
@@ -57,9 +57,9 @@ router.post(
 router.post(
   "/signin",
   asyncHandler(async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User not found." });
     }
@@ -148,7 +148,7 @@ router.get("/bulk", async (req, res) => {
 
   res.json({
     user: users.map((user) => ({
-      username: user.username,
+      email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       _id: user._id,

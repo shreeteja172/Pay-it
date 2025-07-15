@@ -1,0 +1,14 @@
+# Ignore build outputs
+**/node_modules/
+**/dist/
+**/build/
+**/.next/
+
+# Ignore package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore generated files
+**/*.min.js
+**/*.min.css

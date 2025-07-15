@@ -7,6 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+.prettierignore
+.prettierrc
+.prettier.config.js
+
+# Ignore build outputs
+**/node_modules/
+**/dist/
+**/build/
+**/.next/
 node_modules
 dist
 dist-ssr
