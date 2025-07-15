@@ -1,40 +1,62 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { Account } = require("../models/db");
+const { authMiddleware } = require("../middlewares/auth");
 const router = express.Router();
 
-const transferFunds = async (fromAccountId, toAccountId, amount) => {
+router.get("/balance", authMiddleware, async (req, res) => {
+  const account = await Account.findOne({
+    userid: req.userid,
+  });
+
+  res.json({
+    balance: account.balance,
+  });
+});
+
+router.post("/transfer", authMiddleware, async (req, res) => {
   const session = await mongoose.startSession();
 
-  try {
-    await session.withTransaction(async () => {
-      await Account.findByIdAndUpdate(
-        fromAccountId,
-        { $inc: { balance: -amount } },
-        { session }
-      );
+  session.startTransaction();
+  const { amount, to } = req.body;
 
-      await Account.findByIdAndUpdate(
-        toAccountId,
-        { $inc: { balance: amount } },
-        { session }
-      );
+  // Fetch the accounts within the transaction
+  const account = await Account.findOne({ userid: req.userid }).session(
+    session
+  );
+
+  if (!account || account.balance < amount) {
+    await session.abortTransaction();
+    return res.status(400).json({
+      message: "Insufficient balance",
     });
-  } catch (error) {
-    console.error("Transaction failed", error);
-  } finally {
-    session.endSession();
   }
-};
 
-router.post("/transfer", async (req, res) => {
-  try {
-    const { fromAccountId, toAccountId, amount } = req.body;
-    await transferFunds(fromAccountId, toAccountId, amount);
-    res.status(200).json({ message: "Transfer successful" });
-  } catch (error) {
-    res.status(500).json({ message: "Transfer failed", error: error.message });
+  const toAccount = await Account.findOne({ userid: to }).session(session);
+
+  if (!toAccount) {
+    await session.abortTransaction();
+    return res.status(400).json({
+      message: "Invalid account",
+    });
   }
+
+  // Perform the transfer
+  await Account.updateOne(
+    { userid: req.userid },
+    { $inc: { balance: -amount } }
+  ).session(session);
+  await Account.updateOne(
+    { userid: to },
+    { $inc: { balance: amount } }
+  ).session(session);
+
+  // Commit the transaction
+  await session.commitTransaction();
+
+  res.json({
+    message: "Transfer successful",
+  });
 });
 
 module.exports = router;

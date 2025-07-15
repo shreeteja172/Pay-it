@@ -54,7 +54,7 @@ UserSchema.methods.validatePassword = async function (candidatePassword) {
 };
 
 const accountSchema = new mongoose.Schema({
-  userId: {
+  userid: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
