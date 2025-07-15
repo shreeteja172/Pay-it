@@ -15,6 +15,7 @@ const signupSchema = z.object({
   lastName: z.string().min(1),
 });
 
+
 router.post(
   "/signup",
   asyncHandler(async (req, res) => {
