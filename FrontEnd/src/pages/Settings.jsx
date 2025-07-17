@@ -36,7 +36,7 @@ const Settings = () => {
       }
 
       const response = await axios.put(
-        "http://localhost:3000/api/v1/user/settings",
+        `${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/settings`,
         updateData,
         {
           headers: {

@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useEffect, useContext, useState, createContext } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 
-export const Context = createContext();
+
+
+
 
 export const AppContextProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
@@ -17,8 +19,7 @@ export const AppContextProvider = ({ children }) => {
         return;
       }
 
-      const response = await axios.get(
-        "http://localhost:3000/api/v1/account/balance",
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/account/balance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -39,7 +40,7 @@ export const AppContextProvider = ({ children }) => {
         console.error("No token found in localStorage");
         return;
       }
-      const response = await axios.get("http://localhost:3000/api/v1/user/profile",{
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/profile`,{
         headers: {
           Authorization: `Bearer ${token}`,
         },

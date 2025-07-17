@@ -20,7 +20,7 @@ const Signup = () => {
   const handleSignup = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/user/signup",
+        `${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/signup`,
         data
       );
       localStorage.setItem("token", response.data.token);
