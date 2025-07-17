@@ -156,6 +156,19 @@ router.get("/bulk", async (req, res) => {
   });
 });
 
-// router.get('/')
+router.get('/profile', authMiddleware, async (req, res) => {
+  const user = await User.findById(req.userid).select("-password_hash");
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  res.json({
+    user: [{
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      _id: user._id,
+    }],
+  });
+});
 
 module.exports = router;
