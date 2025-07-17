@@ -1,10 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import React from "react";
-
-
-
-
+import { Context } from "../lib/contextapi";
 
 export const AppContextProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
