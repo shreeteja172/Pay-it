@@ -1,14 +1,14 @@
 import React from "react";
-import AppBar from "../Components/AppBar";
-import Balance from "../Components/Balance";
-import Users from "../Components/Users";
+import AppBar from "../components/AppBar";
+import Balance from "../components/Balance";
+import Users from "../components/Users";
 
 const Dashboard = () => {
   return (
     <div>
       <AppBar />
       <div className="m-8">
-        <Balance value={"10,000"} />
+        <Balance />
         <Users />
       </div>
     </div>

@@ -21,7 +21,7 @@ const Signin = () => {
         "http://localhost:3000/api/v1/user/signin",
         data
       );
-      console.log("Signin successful:", response.data);
+      // console.log("Signin successful:", response.data);
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard"); 
     } catch (error) {

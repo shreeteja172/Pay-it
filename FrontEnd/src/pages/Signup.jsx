@@ -23,7 +23,7 @@ const Signup = () => {
         "http://localhost:3000/api/v1/user/signup",
         data
       );
-      console.log("Signup successful:", response.data);
+      // console.log("Signup successful:", response.data);
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (error) {

@@ -8,12 +8,18 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
 
-  useEffect(()=>{
-    axios.get("http://localhost:3000/api/v1/user/bulk?filter" + filter)
-       .then((response) => {
-          setUsers(response.data.users);
-        })
-  },[filter]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/v1/user/bulk?filter=" + filter)
+      .then((response) => {
+        // console.log("API Response:", response.data); 
+        setUsers(response.data.user || []); 
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+        setUsers([]); 
+      });
+  }, [filter]);
 
   return (
     <>
@@ -27,9 +33,11 @@ const Users = () => {
         ></input>
       </div>
       <div>
-        {users.map((user) => (
-          <User user={user} />
-        ))}
+        {users && users.length > 0 ? (
+          users.map((user) => <User key={user._id} user={user} />)
+        ) : (
+          <div className="text-gray-500">No users found</div>
+        )}
       </div>
     </>
   );
