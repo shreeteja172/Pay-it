@@ -1,11 +1,11 @@
 import React from "react";
 
-const Button = ({label,onClick}) => {
+const Button = ({ label, onClick }) => {
   return (
     <button
       onClick={onClick}
       type="button"
-      className=" w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2"
+      className="w-full px-5 py-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:from-indigo-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 ease-in-out transform hover:-translate-y-0.5"
     >
       {label}
     </button>

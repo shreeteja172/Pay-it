@@ -1,9 +1,11 @@
-import React from 'react'
+import React from 'react';
 
-const SubHeading = ({label}) => {
-  return <div className="text-slate-500 text-md pt-1 px-4 pb-4">
-    {label}
-  </div>
-}
+const SubHeading = ({ label }) => {
+  return (
+    <div className="text-gray-500 text-sm font-medium pt-2 px-4 pb-4 tracking-tight">
+      {label}
+    </div>
+  );
+};
 
-export default SubHeading
+export default SubHeading;

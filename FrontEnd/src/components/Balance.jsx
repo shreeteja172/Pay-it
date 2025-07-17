@@ -3,13 +3,16 @@ import { useContext } from "react";
 import { Context } from "./Context";
 
 const Balance = () => {
-  const{balance} = useContext(Context)
+  const { balance } = useContext(Context);
 
   return (
-    // console.log("Balance component rendered", balance),
-    <div className="flex">
-      <div className="font-bold text-lg">Your balance</div>
-      <div className="font-semibold ml-4 text-lg">Rs {balance}</div>
+    <div className="flex items-center space-x-4 p-4 bg-gradient-to-r from-indigo-50/50 to-blue-50/50 rounded-xl shadow-sm border border-gray-100/50">
+      <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">
+        Your Balance
+      </div>
+      <div className="text-xl font-semibold text-gray-800">
+        ₹{balance.toLocaleString("en-IN")}
+      </div>
     </div>
   );
 };
