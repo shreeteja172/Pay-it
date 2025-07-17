@@ -9,15 +9,25 @@ const Users = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     axios
-      .get("http://localhost:3000/api/v1/user/bulk?filter=" + filter)
+      .get("http://localhost:3000/api/v1/user/bulk?filter=" + filter, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       .then((response) => {
-        // console.log("API Response:", response.data); 
-        setUsers(response.data.user || []); 
+        // console.log("API Response:", response.data);
+        const currentUserId = JSON.parse(atob(token.split('.')[1])).userId;
+        //atob toh decode karne use hai payload ko
+        console.log(currentUserId)
+
+        const filteredUsers = response.data.user?.filter(user => user._id !== currentUserId) || [];
+        setUsers(filteredUsers);
       })
       .catch((error) => {
         console.error("API Error:", error);
-        setUsers([]); 
+        setUsers([]);
       });
   }, [filter]);
 
