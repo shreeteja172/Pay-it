@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Context } from "../components/Context";
 import axios from "axios";
+import { Context } from "../lib/contextapi";
 
 const Settings = () => {
   const navigate = useNavigate();
