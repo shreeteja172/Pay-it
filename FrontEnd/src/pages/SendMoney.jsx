@@ -54,7 +54,7 @@ const SendMoney = () => {
                     }}
                     onChange={(e) => setAmount(e.target.value)}
                     type="number"
-                    className="mt-1 block w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 text-lg placeholder-gray-400 transition-colors duration-200"
+                    className="mt-1 block w-full pl-10 pr-4 py-3 text-black bg-gray-50/50 border border-gray-200 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 text-lg placeholder-gray-400 transition-colors duration-200"
                     id="amount"
                     placeholder="Enter amount"
                   />
