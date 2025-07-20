@@ -7,6 +7,8 @@ export const AppContextProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [users, setUsers] = useState([]);
+  const [filter, setFilter] = useState("");
 
   async function fetchData() {
     try {
@@ -16,7 +18,8 @@ export const AppContextProvider = ({ children }) => {
         return;
       }
 
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/account/balance`,
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/account/balance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -37,26 +40,55 @@ export const AppContextProvider = ({ children }) => {
         console.error("No token found in localStorage");
         return;
       }
-      const response = await axios.get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/profile`,{
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Fetched user data:", response.data);
+      setFirstName(response.data.user[0].firstName || "");
+      setLastName(response.data.user[0].lastName || "");
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log("Making API call to fetch all users");
+    axios
+      .get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/bulk`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      console.log("Fetched user data:", response.data);
-      setFirstName(response.data.user[0].firstName || "");
-      setLastName(response.data.user[0].lastName || "");
-    }
-    catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  }
+      .then((response) => {
+        console.log("API Response:", response.data);
+        const currentUserId = JSON.parse(atob(token.split(".")[1])).userId;
+        const filteredUsers =
+          response.data.user?.filter((user) => user._id !== currentUserId) ||
+          [];
+        console.log("Users after filtering out current user:", filteredUsers);
+        setUsers(filteredUsers);
+      })
+      .catch((error) => {
+        console.error("API Error:", error);
+        setUsers([]);
+      });
+  }, []); // Remove filter dependency - only fetch once
+
   useEffect(() => {
     fetchData();
     fetchUserData();
   }, []);
 
   return (
-    <Context.Provider value={{ balance, firstName, lastName }}>
+    <Context.Provider
+      value={{ balance, firstName, lastName, users, filter, setFilter }}
+    >
       {children}
     </Context.Provider>
   );

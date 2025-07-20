@@ -1,37 +1,37 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useContext } from "react";
 import Button from "./Button";
 import User from "./User";
-import axios from "axios";
+import { Context } from "../lib/contextapi";
 
+function normalize(str) {
+  if (typeof str !== "string") return "";
+  return str.toLowerCase().replace(/[^a-z]/g, ""); // keeps only a-z, removes space/punctuation
+}
 const Users = () => {
-  const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("");
+  const { users, setFilter, filter } = useContext(Context);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/bulk?filter=` +
-          filter,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        const currentUserId = JSON.parse(atob(token.split(".")[1])).userId;
-        const filteredUsers =
-          response.data.user?.filter((user) => user._id !== currentUserId) ||
-          [];
-        setUsers(filteredUsers);
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-        setUsers([]);
-      });
-  }, [filter]);
+  const filteredUsers = users.filter((user) => {
+    // Handle empty search - show all users
+    if (!filter || filter.trim() === "") {
+      return true;
+    }
+
+    const firstName = user.firstName || "";
+    const lastName = user.lastName || "";
+    const fullName = `${firstName} ${lastName}`;
+
+    const searchTerm = normalize(filter);
+    const normalizedFirstName = normalize(firstName);
+    const normalizedLastName = normalize(lastName);
+    const normalizedFullName = normalize(fullName);
+
+    // Match against first name, last name, or full name
+    return (
+      normalizedFirstName.includes(searchTerm) ||
+      normalizedLastName.includes(searchTerm) ||
+      normalizedFullName.includes(searchTerm)
+    );
+  });
 
   return (
     <div className="relative">
@@ -86,9 +86,9 @@ const Users = () => {
           <div className="absolute bottom-4 left-8 w-24 h-24 bg-gradient-to-r from-purple-400/8 to-indigo-400/8 rounded-full blur-2xl animate-pulse delay-1000"></div>
 
           <div className="relative z-10">
-            {users && users.length > 0 ? (
+            {filteredUsers && filteredUsers.length > 0 ? (
               <div className="space-y-3">
-                {users.map((user, index) => (
+                {filteredUsers.map((user, index) => (
                   <div
                     key={user._id}
                     className="group/item relative transform transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 rounded-2xl p-4 -mx-4 hover:bg-gradient-to-r hover:from-indigo-50/30 hover:to-blue-50/30 hover:shadow-lg hover:shadow-indigo-500/10 border border-transparent hover:border-indigo-100/50"

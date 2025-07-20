@@ -136,11 +136,13 @@ router.get("/bulk", async (req, res) => {
       {
         firstName: {
           $regex: filter,
+          $options: "i", // Case-insensitive search
         },
       },
       {
         lastName: {
           $regex: filter,
+          $options: "i", // Case-insensitive search
         },
       },
     ],
@@ -156,18 +158,20 @@ router.get("/bulk", async (req, res) => {
   });
 });
 
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get("/profile", authMiddleware, async (req, res) => {
   const user = await User.findById(req.userid).select("-password_hash");
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
   res.json({
-    user: [{
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      _id: user._id,
-    }],
+    user: [
+      {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        _id: user._id,
+      },
+    ],
   });
 });
 
