@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../lib/contextapi";
-import { toast } from "react-hot-toast";
 
 const AppBar = () => {
   const navigate = useNavigate();
@@ -19,14 +18,6 @@ const AppBar = () => {
           },
         }
       )
-      .then(() => {
-        // console.log("Settings updated successfully:", response.data);
-        toast.success("Settings updated successfully!");
-      })
-      .catch((error) => {
-        console.error("There was an error updating settings:", error);
-        alert("Failed to update settings. Please try again.");
-      });
 
     navigate("/settings");
   };

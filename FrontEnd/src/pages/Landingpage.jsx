@@ -42,7 +42,7 @@ const LandingPage = () => {
             to="/signup"
             className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl text-lg font-medium shadow-lg transition-all duration-300 hover:-translate-y-0.5"
           >
-            Tap Here, Become CEO
+            Tap Here, to play with Pay-it
           </Link>
         </div>
       </main>
