@@ -1,67 +1,67 @@
-import { useContext } from "react";
-import { Context } from "../lib/contextapi";
-import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-const Dashboard = () => {
-  const { users, handleSendMoney, searchTerm, setSearchTerm } = useContext(Context);
-
-  const filteredUsers = users.filter((user) =>
-    `${user.firstName} ${user.lastName}`
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase())
-  );
-
+const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white px-4 py-6">
-      <div className="max-w-md w-full mx-auto space-y-4">
+    <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-white flex flex-col">
 
-        {/* Header */}
-        <div className="text-center space-y-1">
-          <h2 className="text-2xl font-bold text-indigo-500">Users</h2>
-          <input
-            type="text"
-            placeholder="Search users..."
-            className="w-full px-4 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <header className="p-6 flex flex-col sm:flex-row justify-between items-center gap-4 max-w-6xl mx-auto w-full">
+        <h1 className="text-3xl font-bold text-indigo-500 tracking-wide">
+          Pay-it
+        </h1>
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+          <Link
+            to="/signin"
+            className="text-zinc-300 hover:text-white transition-colors text-base"
+          >
+            Login
+          </Link>
+          <Link
+            to="/signup"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl shadow-md transition-all duration-200 text-base"
+          >
+            Get Started
+          </Link>
         </div>
+      </header>
 
-        {/* User List */}
-        <div className="space-y-4">
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => (
-              <div
-                key={user._id}
-                className="bg-zinc-900 p-4 rounded-xl shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-              >
-                {/* User Info */}
-                <div className="flex items-center gap-3">
-                  <div className="bg-indigo-600 text-white p-2 rounded-full">
-                    <FaUser className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">{user.firstName} {user.lastName}</h3>
-                    <p className="text-sm text-zinc-400">{user.email}</p>
-                  </div>
-                </div>
+      <main className="flex flex-1 items-center justify-center px-4">
+        <div className="max-w-3xl text-center space-y-6 animate-fade-in">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-500 to-blue-500 drop-shadow-md leading-tight">
+            Not a Real Bank.
+            <br />
+            Just Vibes and Pay Buttons.
+          </h2>
 
-                {/* Send Button */}
-                <button
-                  onClick={() => handleSendMoney(user)}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm px-4 py-2 rounded-lg w-full sm:w-auto transition"
-                >
-                  Send Money
-                </button>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-zinc-500">No users found.</p>
-          )}
+          <p className="text-zinc-400 text-base sm:text-lg max-w-xl mx-auto">
+            Totally secure (probably). Built for fun, not finance. Click stuff,
+            send “money,” and pretend you’re the next fintech founder.
+          </p>
+
+          <Link
+            to="/signup"
+            className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl text-base sm:text-lg font-medium shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+          >
+            Tap Here, to play with Pay-it
+          </Link>
         </div>
-      </div>
+      </main>
+
+      <footer className="p-4 text-center text-zinc-500 text-sm border-t border-zinc-800">
+        <p className="flex justify-center items-center gap-1 flex-wrap text-center text-xs sm:text-sm">
+          © {new Date().getFullYear()} Pay-it. Built by
+          <a
+            href="https://github.com/shreeteja172"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-zinc-400 hover:text-white transition"
+          >
+            Shreeteja
+          </a>
+          for fun, not finance 💸
+        </p>
+      </footer>
     </div>
   );
 };
 
-export default Dashboard;
+export default LandingPage;

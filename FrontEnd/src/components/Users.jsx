@@ -32,7 +32,6 @@ const Users = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold text-zinc-100">Users</h2>
 
@@ -62,7 +61,6 @@ const Users = () => {
         </div>
       </div>
 
-      {/* Users List */}
       <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6 shadow-sm">
         {filteredUsers && filteredUsers.length > 0 ? (
           <div className="space-y-3">

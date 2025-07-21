@@ -8,7 +8,6 @@ const User = ({ user }) => {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-neutral-900 rounded-xl border border-neutral-800 hover:bg-neutral-800 transition-all duration-200">
       
-      {/* User Info */}
       <div className="flex items-center space-x-4">
         <div className="rounded-full h-12 w-12 bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-inner">
           <span className="text-xl font-semibold text-white uppercase">
@@ -23,7 +22,6 @@ const User = ({ user }) => {
         </div>
       </div>
 
-      {/* Send Money Button */}
       <div className="w-full sm:w-auto">
         <Button
           onClick={() =>
