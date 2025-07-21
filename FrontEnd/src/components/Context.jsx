@@ -26,7 +26,7 @@ export const AppContextProvider = ({ children }) => {
           },
         }
       );
-      console.log("Fetched", response.data);
+      // console.log("Fetched", response.data);
       setBalance(Number(response.data.balance).toFixed(2) || 0);
     } catch (error) {
       console.error("Error fetching", error);
@@ -48,7 +48,7 @@ export const AppContextProvider = ({ children }) => {
           },
         }
       );
-      console.log("Fetched user data:", response.data);
+      // console.log("Fetched user data:", response.data);
       setFirstName(response.data.user[0].firstName || "");
       setLastName(response.data.user[0].lastName || "");
     } catch (error) {
@@ -58,7 +58,7 @@ export const AppContextProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("Making API call to fetch all users");
+    // console.log("Making API call to fetch all users");
     axios
       .get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/bulk`, {
         headers: {
@@ -66,12 +66,12 @@ export const AppContextProvider = ({ children }) => {
         },
       })
       .then((response) => {
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
         const currentUserId = JSON.parse(atob(token.split(".")[1])).userId;
         const filteredUsers =
           response.data.user?.filter((user) => user._id !== currentUserId) ||
           [];
-        console.log("Users after filtering out current user:", filteredUsers);
+        // console.log("Users after filtering out current user:", filteredUsers);
         setUsers(filteredUsers);
       })
       .catch((error) => {

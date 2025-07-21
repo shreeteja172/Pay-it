@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../lib/contextapi";
+import { toast } from "react-hot-toast";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -44,10 +45,13 @@ const Settings = () => {
         }
       );
 
-      alert("Settings updated successfully!");
+      // alert("Settings updated successfully!");
+      toast.success("Settings updated successfully!");
       setFormData({ ...formData, password: "" });
     } catch (error) {
-      console.error("There was an error updating settings:", error);
+      // console.error("There was an error updating settings:", error);
+      toast.error(`Failed to update settings: ${error.response?.data?.message || "Please try again later."}`);
+
       alert("Failed to update settings. Please try again.");
     }
   };
@@ -105,7 +109,7 @@ const Settings = () => {
 
             <div>
               <label htmlFor="password" className="block text-sm mb-1">
-                New Password (optional)
+                New Password (leave blank to keep current)
               </label>
               <input
                 type="password"
@@ -135,6 +139,21 @@ const Settings = () => {
               </button>
             </div>
           </form>
+          <div className="mt-12 bg-neutral-900 border border-neutral-800 p-6 rounded-xl shadow-sm">
+            <h2 className="text-lg font-medium mb-4 border-b border-neutral-800 pb-3">
+              Danger Zone
+            </h2>
+
+            <button
+              onClick={() => {
+                localStorage.clear(); 
+                navigate("/");
+              }}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition"
+            >
+              Log Out
+            </button>
+          </div>
         </div>
       </main>
     </div>

@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Context } from "../lib/contextapi";
+import { toast } from "react-hot-toast";
 
 const AppBar = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const AppBar = () => {
   const handleLogic = () => {
     axios
       .put(
-        "http://localhost:3000/api/v1/user/settings",
+        `${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/settings`,
         { firstName, lastName },
         {
           headers: {
@@ -18,8 +19,9 @@ const AppBar = () => {
           },
         }
       )
-      .then((response) => {
-        console.log("Settings updated successfully:", response.data);
+      .then(() => {
+        // console.log("Settings updated successfully:", response.data);
+        toast.success("Settings updated successfully!");
       })
       .catch((error) => {
         console.error("There was an error updating settings:", error);
@@ -32,6 +34,20 @@ const AppBar = () => {
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-5xl bg-zinc-900/80 backdrop-blur-md border border-zinc-800 shadow-md rounded-xl px-5 py-2.5 flex items-center justify-between">
       <h1 className="text-lg font-medium text-white tracking-tight">Pay-it</h1>
+      <nav className="flex items-center space-x-4">
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="text-sm text-zinc-300 hover:text-white transition-colors"
+        >
+          Dashboard
+        </button>
+        <button
+          onClick={() => navigate("/about")}
+          className="text-sm text-zinc-300 hover:text-white transition-colors"
+        >
+          About
+        </button>
+      </nav>
       <div className="flex items-center space-x-3">
         <span className="text-sm text-zinc-400">Hello</span>
         <button

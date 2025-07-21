@@ -6,13 +6,10 @@ import Button from "../components/Button";
 import BottomWarning from "../components/BottomWarning";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Signin = () => {
-  const [data, setData] = useState({
-    email: "",
-    password: "",
-  });
-
+  const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
   const handleSignin = async () => {
@@ -24,54 +21,45 @@ const Signin = () => {
       localStorage.setItem("token", response.data.token);
       navigate("/dashboard");
     } catch (error) {
-      console.error("There was an error signing in:", error);
-      alert("Signin failed. Please check your credentials.");
+      toast.error(`Sign in failed: ${error.response?.data?.message || "Please try again later."}`);
     }
   };
 
   return (
-    <div className="min-h-screen bg-neutral-950 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-neutral-900 text-white rounded-2xl border border-neutral-800 shadow-lg p-8">
-        <div className="text-center mb-8">
-          <Heading
-            label={<span className="text-3xl font-bold text-white">Sign In</span>}
-          />
-          <SubHeading label="Enter your credentials to access your account" />
+    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-neutral-900 text-white rounded-2xl border border-neutral-800 shadow-md p-6 md:p-8 space-y-6">
+        <div className="text-center space-y-1">
+          <Heading label="Sign In" />
+          <SubHeading label="Access your account using your credentials" />
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-4">
           <InputBox
-            onChange={(e) => setData({ ...data, email: e.target.value })}
-            placeholder="harkirat@gmail.com"
-            label="Email"
             type="email"
-            className="w-full bg-neutral-800 text-white border border-neutral-700 rounded-xl px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            label="Email"
+            placeholder="you@example.com"
+            onChange={(e) => setData({ ...data, email: e.target.value })}
           />
           <InputBox
-            onChange={(e) => setData({ ...data, password: e.target.value })}
-            placeholder="••••••••"
-            label="Password"
             type="password"
-            className="w-full bg-neutral-800 text-white border border-neutral-700 rounded-xl px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            label="Password"
+            placeholder="••••••••"
+            onChange={(e) => setData({ ...data, password: e.target.value })}
           />
         </div>
 
-        <div className="mt-6">
-          <Button
-            onClick={handleSignin}
-            label="Sign In"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-medium transition-colors"
-          />
-        </div>
+        <Button
+          label="Sign In"
+          onClick={handleSignin}
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl transition"
+        />
 
-        <div className="mt-4">
-          <BottomWarning
-            label="Don't have an account?"
-            buttonText="Sign Up"
-            to="/"
-            className="text-sm text-gray-400 hover:text-indigo-400 text-center"
-          />
-        </div>
+        <BottomWarning
+          label="Don't have an account?"
+          buttonText="Sign Up"
+          to="/signup"
+          className="text-sm text-gray-400 hover:text-indigo-400 text-center"
+        />
       </div>
     </div>
   );
