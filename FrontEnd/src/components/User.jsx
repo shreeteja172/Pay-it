@@ -6,7 +6,8 @@ const User = ({ user }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-between p-4 bg-neutral-900 rounded-xl border border-neutral-800 hover:bg-neutral-800 transition-all duration-200">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-neutral-900 rounded-xl border border-neutral-800 hover:bg-neutral-800 transition-all duration-200">
+      
       {/* User Info */}
       <div className="flex items-center space-x-4">
         <div className="rounded-full h-12 w-12 bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center shadow-inner">
@@ -22,8 +23,8 @@ const User = ({ user }) => {
         </div>
       </div>
 
-      {/* Send Button */}
-      <div>
+      {/* Send Money Button */}
+      <div className="w-full sm:w-auto">
         <Button
           onClick={() =>
             navigate(
@@ -36,7 +37,7 @@ const User = ({ user }) => {
             )
           }
           label={
-            <span className="flex items-center">
+            <span className="flex items-center justify-center">
               <svg
                 className="w-4 h-4 mr-2"
                 fill="none"
@@ -54,7 +55,7 @@ const User = ({ user }) => {
               Send Money
             </span>
           }
-          className="px-4 py-2 bg-neutral-100 text-neutral-900 font-semibold rounded-lg hover:bg-white hover:text-black transition-all duration-300"
+          className="w-full sm:w-auto px-4 py-2 bg-neutral-100 text-neutral-900 font-semibold rounded-lg hover:bg-white hover:text-black transition-all duration-300"
         />
       </div>
     </div>
