@@ -19,9 +19,14 @@ const Signin = () => {
         data
       );
       localStorage.setItem("token", response.data.token);
+      toast.success("Signed in successfully!");
       navigate("/dashboard");
     } catch (error) {
-      toast.error(`Sign in failed: ${error.response?.data?.message || "Please try again later."}`);
+      toast.error(
+        `Sign in failed: ${
+          error.response?.data?.message || "Please try again later."
+        }`
+      );
     }
   };
 

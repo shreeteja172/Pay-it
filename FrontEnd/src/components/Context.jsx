@@ -9,6 +9,7 @@ export const AppContextProvider = ({ children }) => {
   const [lastName, setLastName] = useState("");
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
+  const [loading, setLoading] = useState(true);
 
   async function fetchData() {
     try {
@@ -57,7 +58,22 @@ export const AppContextProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    if (loading) {
+      return; // Prevent multiple initializations
+    }
+    const initialize = async () => {
+      await Promise.all([fetchData(), fetchUserData()]);
+      setLoading(false);
+    };
+    initialize();
+  }, [loading]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found in localStorage");
+      return;
+    }
     // console.log("Making API call to fetch all users");
     axios
       .get(`${import.meta.env.VITE_BACKEND_APP_URL}/api/v1/user/bulk`, {
@@ -78,16 +94,25 @@ export const AppContextProvider = ({ children }) => {
         console.error("API Error:", error);
         setUsers([]);
       });
-  }, []); // Remove filter dependency - only fetch once
-
-  useEffect(() => {
-    fetchData();
-    fetchUserData();
   }, []);
+
+  // useEffect(() => {
+  //   fetchData();
+  //   fetchUserData();
+  // }, []);
 
   return (
     <Context.Provider
-      value={{ balance, firstName, lastName, users, filter, setFilter }}
+      value={{
+        balance,
+        firstName,
+        lastName,
+        users,
+        filter,
+        setFirstName,
+        setLastName,
+        setFilter,
+      }}
     >
       {children}
     </Context.Provider>

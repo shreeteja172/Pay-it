@@ -7,7 +7,6 @@ const Balance = () => {
   return (
     <div className="bg-neutral-900 border border-neutral-800 rounded-xl px-6 py-5 flex items-center justify-between shadow-sm">
       
-      {/* Left: Balance Info */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
@@ -21,7 +20,6 @@ const Balance = () => {
         </p>
       </div>
 
-      {/* Right: Status */}
       <div className="flex flex-col items-end gap-2">
         <div className="flex items-center gap-2 px-2 py-1 bg-green-900 text-green-300 text-xs font-medium rounded-full">
           <div className="w-2 h-2 bg-green-400 rounded-full" />
