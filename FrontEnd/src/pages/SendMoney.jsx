@@ -6,6 +6,8 @@ import { toast } from "react-hot-toast";
 import { useContext } from "react";
 import { Context } from "../lib/contextapi";
 import { useNavigate } from "react-router-dom";
+
+
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");

@@ -59,7 +59,7 @@ const Settings = () => {
   const handleLogout = () => {
   localStorage.removeItem("token");
   window.location.reload();
-  navigate("/"); 
+  navigate("/signin"); 
 };
 
 
