@@ -56,6 +56,13 @@ const Settings = () => {
     }
   };
 
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.reload();
+  navigate("/"); 
+};
+
+
   return (
     <div className="min-h-screen bg-neutral-950 text-white font-sans">
       <header className="border-b border-neutral-800">
@@ -145,10 +152,7 @@ const Settings = () => {
             </h2>
 
             <button
-              onClick={() => {
-                localStorage.clear(); 
-                navigate("/");
-              }}
+              onClick={handleLogout}
               className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-medium transition"
             >
               Log Out

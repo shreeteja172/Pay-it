@@ -2,13 +2,17 @@ import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import AppBar from "../components/AppBar";
-import { toast } from "react-hot-toast"; 
-
+import { toast } from "react-hot-toast";
+import { useContext } from "react";
+import { Context } from "../lib/contextapi";
+import { useNavigate } from "react-router-dom";
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
   const name = searchParams.get("name") || "";
   const [amount, setAmount] = useState(0);
+  const {setBalance} = useContext(Context);
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -73,11 +77,18 @@ const SendMoney = () => {
                   }
                 )
                 .then(() => {
+                  toast.success("Transfer successful! 🎉");
                   setAmount(0);
-                  toast.success("Transfer successful! 🎉")})
+                  setBalance((prev) => prev - amount);
+                  navigate("/dashboard");
+                })
 
                 .catch((error) =>
-                  toast.error(`Transfer failed: ${error.response?.data?.message || "Please try again later."}`)
+                  toast.error(
+                    `Transfer failed: ${
+                      error.response?.data?.message || "Please try again later."
+                    }`
+                  )
                 );
             }}
             className="w-full mt-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white text-base font-medium shadow-lg hover:-translate-y-[1px] transition-all duration-300"

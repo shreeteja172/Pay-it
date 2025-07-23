@@ -7,7 +7,8 @@ import BottomWarning from "../components/BottomWarning";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
+import { useContext } from "react";
+import { Context } from "../lib/contextapi";
 const Signup = () => {
   const [data, setData] = useState({
     firstName: "",
@@ -18,6 +19,7 @@ const Signup = () => {
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false); 
+  const { setAuthKey } = useContext(Context);
 
   const handleSignup = async () => {
     setLoading(true);
@@ -27,10 +29,11 @@ const Signup = () => {
         data
       );
       localStorage.setItem("token", response.data.token);
+      setAuthKey((prev) => prev + 1);
       toast.success("Signup successful! Redirected to dashboard...");
       navigate("/dashboard");
     } catch (error) {
-      // console.error("Signup error:", error);
+      console.error("Signup error:", error);
       toast.error(`Signup failed: ${error.response?.data?.message || "Please try again later."}`);
     } finally {
       setLoading(false);

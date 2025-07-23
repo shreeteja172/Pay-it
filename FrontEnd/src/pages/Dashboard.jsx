@@ -4,9 +4,13 @@ import Balance from "../components/Balance";
 import Users from "../components/Users";
 import Footer from "../components/Footer";
 import { useState,useEffect} from "react";
+import { useContext } from "react";
+import { Context } from "../lib/contextapi";
+
 const Dashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true);
+  const { setBalance} = useContext(Context);
   
   useEffect(() => {
     const timer = setTimeout(() => {

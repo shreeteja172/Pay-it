@@ -7,10 +7,12 @@ import BottomWarning from "../components/BottomWarning";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-
+import { useContext } from "react";
+import { Context } from "../lib/contextapi";
 const Signin = () => {
   const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const { setAuthKey } = useContext(Context);
 
   const handleSignin = async () => {
     try {
@@ -19,6 +21,7 @@ const Signin = () => {
         data
       );
       localStorage.setItem("token", response.data.token);
+      setAuthKey((prev) => prev + 1);
       toast.success("Signed in successfully!");
       navigate("/dashboard");
     } catch (error) {

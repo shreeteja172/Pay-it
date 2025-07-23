@@ -17,6 +17,7 @@ const Balance = () => {
 
         <p className="text-3xl font-bold text-white tracking-tight">
           ₹ {balance.toLocaleString("en-IN")}
+          
         </p>
       </div>
 
