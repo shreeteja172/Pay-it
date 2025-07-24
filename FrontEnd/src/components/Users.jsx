@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import Button from "./Button";
 import User from "./User";
 import { Context } from "../lib/contextapi";
+// import useDebounce from "../hooks/useDebounce";
 
 function normalize(str) {
   if (typeof str !== "string") return "";
@@ -9,6 +10,8 @@ function normalize(str) {
 }
 
 const Users = () => {
+  // const [value, setValue] = useState("");
+  // const debounce = useDebounce(value, 300);
   const { users, setFilter, filter } = useContext(Context);
 
   const filteredUsers = users.filter((user) => {
@@ -54,6 +57,8 @@ const Users = () => {
             <input
               type="text"
               placeholder="Search users..."
+              //yahape debounce functionality add karna hai
+
               onChange={(e) => setFilter(e.target.value)}
               className="w-full outline-none bg-transparent text-sm text-zinc-100 placeholder-zinc-500"
             />

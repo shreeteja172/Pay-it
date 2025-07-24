@@ -58,7 +58,8 @@ const Settings = () => {
 
   const handleLogout = () => {
   localStorage.removeItem("token");
-  window.location.reload();
+  // window.location.reload();
+  toast.success("Logged out successfully!");
   navigate("/signin"); 
 };
 
