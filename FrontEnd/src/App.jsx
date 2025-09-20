@@ -8,11 +8,12 @@ import Settings from "./pages/Settings";
 import About from "./pages/About";
 import { Toaster } from "react-hot-toast";
 import LandingPage from "./pages/Landingpage";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   return (
     <>
-    <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+      <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -24,6 +25,7 @@ function App() {
           <Route path="/about" element={<About />} />
         </Routes>
       </BrowserRouter>
+      <Analytics />
     </>
   );
 }
